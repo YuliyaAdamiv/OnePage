@@ -16,7 +16,7 @@ class WaitingForGetRequest extends React.Component {
           <Card />
           <Card />
         </div>
-        <Button className="main" name="Show more" />
+        <Button name="Show more" />
       </div>
     );
   }

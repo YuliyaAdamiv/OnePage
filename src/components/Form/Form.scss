@@ -1,3 +1,29 @@
+@import '../theme.scss';
 .text-center {
-  text-align: center;
+  width: 380px;
+  display: block;
+  margin: 0 auto;
+}
+.radio-btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-bottom: 50px;
+}
+label {
+  width: 380px;
+  display: block;
+  margin: 0 auto;
+}
+.file {
+  width: 300px;
+  padding: 14px 0 14px 16px;
+  margin-bottom: 50px;
+}
+.upload {
+  width: 80px;
+  padding: 14px 15px;
+  background: $white;
+  border: 1px solid rgba(0, 0, 0, 0.87);
+  border-radius: 4px 0px 0px 4px;
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '../Button/Button';
 import './MainSection.scss';
 
 class MainSection extends React.Component {
@@ -22,7 +23,7 @@ class MainSection extends React.Component {
             mind. They should also be excited to learn, as the world of
             Front-End Development keeps evolving.
           </p>
-          <button className="button main">{this.state.name}</button>
+          <Button name={this.state.name} />
         </div>
       </div>
     );

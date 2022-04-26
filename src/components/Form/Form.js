@@ -1,7 +1,6 @@
 import React from 'react';
 import Input from '../Form/Input/Input';
 import Button from '../Button/Button';
-import RadioButton from '../Form/RadioButton/RadioButton';
 import './Form.scss';
 
 class Form extends React.Component {
@@ -20,31 +19,39 @@ class Form extends React.Component {
         </div>
         <p className="text-center">Select your position</p>
         <div className="radio-btns">
-          <div className="radio">
-            <RadioButton value="Frontend developer" />
+          <label>
+            <input type="radio" checked={true} />
             Frontend developer
-          </div>
-          <div className="radio">
-            <RadioButton value="Backend developer" />
+          </label>
+          <label>
+            <input type="radio" />
             Backend developer
-          </div>
-          <div className="radio">
-            <RadioButton value="Designer" />
+          </label>
+          <label>
+            <input type="radio" />
             Designer
-          </div>
-          <div className="radio">
-            <RadioButton value="QA" />
+          </label>
+          <label>
+            <input type="radio" />
             QA
-          </div>
+          </label>
         </div>
-        <input
-          ref="fileInput"
-          onChange={this.handleFileUpload}
-          type="file"
-          style={{display: 'none'}}
-        />
-        <button onClick={() => this.refs.fileInput.click()}>Upload</button>
-        <input className="" placeholder="Upload your photo "></input>
+        <label>
+          <input
+            ref="fileInput"
+            onChange={this.handleFileUpload}
+            type="file"
+            style={{display: 'none'}}
+          />
+          <button
+            className="upload"
+            onClick={() => this.refs.fileInput.click()}
+          >
+            Upload
+          </button>
+          <input className="file" placeholder="Upload your photo " />
+        </label>
+
         <Button name="Sing up" />
       </div>
     );

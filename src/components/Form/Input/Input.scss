@@ -1,7 +1,9 @@
+@import '../../theme.scss';
 .input {
   width: 380px;
   padding: 14px 0 14px 16px;
   display: block;
   margin: 0 auto;
   margin-bottom: 50px;
+  border: 1px solid $medium-grey;
 }
