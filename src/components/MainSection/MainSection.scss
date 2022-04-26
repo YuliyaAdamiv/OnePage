@@ -1,0 +1,28 @@
+@import '../theme.scss';
+.main-section {
+  width: 380px;
+  display: block;
+  margin: 0 auto;
+  padding-top: 164px;
+  padding-bottom: 163px;
+}
+.title-text {
+  font-size: 40px;
+  line-height: 40px;
+}
+.main-text {
+  padding-bottom: 34px;
+  font-size: 16px;
+  line-height: 26px;
+}
+.main {
+  display: block;
+  margin: 0 auto;
+}
+.title {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(../../img/background-img.jpeg);
+  background-position: center center;
+  background-size: cover;
+  color: $white;
+}

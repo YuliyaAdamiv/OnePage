@@ -1,0 +1,26 @@
+@import './components/theme.scss';
+body {
+  font-family: 'Nunito', sans-serif;
+  background: $light-grey;
+}
+* {
+  margin: 0;
+}
+.App {
+  display: block;
+  margin: 0 auto;
+  max-width: 1170px;
+}
+.App-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 13px 0;
+  background: $white;
+  width: 100%;
+}
+.App-content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+}
