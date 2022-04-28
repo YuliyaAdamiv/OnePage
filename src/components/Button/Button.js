@@ -6,12 +6,15 @@ class Button extends React.Component {
     super(props);
     this.state = {
       name: props.name,
+      type: props.type,
     };
   }
   render() {
     return (
       <div>
-        <button className="button">{this.state.name}</button>
+        <button type={this.state.type} className="button">
+          {this.state.name}
+        </button>
       </div>
     );
   }

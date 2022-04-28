@@ -27,3 +27,18 @@ label {
   border: 1px solid rgba(0, 0, 0, 0.87);
   border-radius: 4px 0px 0px 4px;
 }
+.input {
+  width: 380px;
+  padding: 14px 0 14px 16px;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 25px;
+  border: 1px solid $medium-grey;
+}
+.message-error {
+  width: 380px;
+  display: block;
+  margin: 0 auto;
+  color: red;
+  padding: 0 0 25px 0;
+}

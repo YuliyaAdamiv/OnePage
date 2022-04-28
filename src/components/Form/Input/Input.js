@@ -11,7 +11,12 @@ class Input extends React.Component {
   render() {
     return (
       <div>
-        <input className="input" placeholder={this.state.placeholder}></input>
+        <input
+          className="input"
+          type="text"
+          name={this.props.name}
+          placeholder={this.state.placeholder}
+        ></input>
       </div>
     );
   }
