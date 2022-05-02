@@ -10,8 +10,8 @@ class Form extends React.Component {
       name: '',
       email: '',
       phone: '',
-      error: null,
       isLoaded: false,
+      error: null,
       token: '',
     };
     this.validator = new SimpleReactValidator({
@@ -19,6 +19,18 @@ class Form extends React.Component {
         phone: {
           message:
             'User phone number. Number should start with code of Ukraine +380.',
+          rule: (value, params, validator) => {
+            return (
+              validator.helpers.testRegex(value, /^[\+]{0,1}380([0-9]{9})$/i) &&
+              params.indexOf(value) === -1
+            );
+          },
+          messageReplace: (message, params) =>
+            message.replace(':values', this.helpers.toSentence(params)),
+          required: true,
+        },
+        files: {
+          message: 'User photo is not required.',
           rule: (value, params, validator) => {
             return (
               validator.helpers.testRegex(value, /^[\+]{0,1}380([0-9]{9})$/i) &&
@@ -42,14 +54,13 @@ class Form extends React.Component {
         (result) => {
           this.setState({
             isLoaded: true,
-            token: result,
+            token: result.token,
           });
-          console.log(result);
+          console.log(result.token);
           console.log(this.state);
         },
         (error) => {
           this.setState({
-            isLoaded: true,
             error,
           });
         }
@@ -67,20 +78,21 @@ class Form extends React.Component {
       });
   }
   handleFileUpload = (event) => {
-    const {photo} = event.target.files[0].name;
-    const {type} = event.target;
+    let photo = event.target.files[0];
+    let form = new FormData();
     this.setState({
-      [photo]: '',
-      [type]: type,
+      photo: form,
     });
-    console.log(event.target.files[0].name);
+    console.log(photo);
+    console.log(form);
   };
+
   handleChange = (e) => {
-    const {id, name, value} = e.target;
+    const {id, name, position_id, value} = e.target;
 
     this.setState({
       [name]: value,
-      [id]: id,
+      [position_id]: id,
     });
     console.log(id, value);
   };
@@ -89,30 +101,39 @@ class Form extends React.Component {
   };
   submitHandler = (e) => {
     e.preventDefault();
-    console.log(this.state);
+    // console.log(this.state);
+    // console.log(formData);
     fetch('https://frontend-test-assignment-api.abz.agency/api/v1/users', {
       method: 'POST',
-      // body: this.state,
-      // headers: {Token: token},
+      // body: JSON.stringify(formData),
+      headers: {Token: this.state.token},
     })
       .then(function (response) {
         return response.json();
       })
-      .then(function (data) {
-        console.log(data);
-        if (data.success) {
-          console.log(data.success);
+      .then(function (formData) {
+        console.log(formData);
+        if (formData.success) {
+          console.log(formData.success);
         } else {
-          console.log(data.error);
+          console.log(formData.error);
         }
       })
       .catch(function (error) {
         // error;
       });
   };
+
   render() {
-    const {name, email, phone} = this.state;
-    const {error, isLoaded} = this.state;
+    const {name, email, phone, error, position, photo, isLoaded} = this.state;
+    var formData = {
+      name: name,
+      email: email,
+      phone: phone,
+      position_id: position,
+      photo: photo,
+    };
+    // console.log(formData);
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -217,6 +238,7 @@ class Form extends React.Component {
                 ref="fileInput"
                 onChange={this.handleFileUpload}
                 type="file"
+                accept="image/*"
                 style={{display: 'none'}}
               />
               <button
@@ -225,10 +247,21 @@ class Form extends React.Component {
               >
                 Upload
               </button>
-              <input className="file" placeholder="Upload your photo " />
+              <input
+                className="file"
+                placeholder="Upload your photo "
+                onBlur={() => this.validator.showMessageFor('files')}
+              />
+              <div className="message-error">
+                {this.validator.message(
+                  'files',
+                  this.state.photo,
+                  'required|files'
+                )}
+              </div>
             </label>
 
-            <Button type="submit" name="Sing up" />
+            <Button onClick={this.submitHandler} type="submit" name="Sing up" />
           </form>
         </div>
       );
