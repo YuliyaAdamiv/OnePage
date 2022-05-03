@@ -1,0 +1,39 @@
+@import '../theme.scss';
+.header {
+  width: 100%;
+}
+.App-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 13px 0;
+  background-color: $white;
+}
+
+.App-content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+}
+
+.full-width {
+  position: relative;
+  margin: 0 -9999rem;
+  padding: 0 9999rem;
+  background: $white;
+}
+@media (min-width: 320px) and (max-width: 359px) {
+  .App-header {
+    padding: 17px 16px;
+  }
+}
+@media (min-width: 360px) and (max-width: 767px) {
+  .App-header {
+    padding: 17px 34px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .App-header {
+    padding: 17px 60px;
+  }
+}

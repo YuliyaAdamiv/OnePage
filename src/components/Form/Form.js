@@ -140,7 +140,7 @@ class Form extends React.Component {
       return <div>Loading...</div>;
     } else {
       return (
-        <div>
+        <div className="form-group">
           <h1 className="title-waiting">Working with POST request</h1>
           <form onSubmit={this.submitHandler}>
             <input

@@ -14,3 +14,15 @@
 .card-inner p {
   margin-bottom: 5px;
 }
+
+@media (min-width: 360px) and (max-width: 767px) {
+  .card-inner {
+    width: 348px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .card-inner {
+    width: 344px;
+  }
+}

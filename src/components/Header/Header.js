@@ -12,13 +12,15 @@ class Header extends React.Component {
   }
   render() {
     return (
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <div className="App-content">
-          <Button className="App-item" name="Users" />
-          <Button className="App-item" name="Sing up" />
-        </div>
-      </header>
+      <div className="full-width">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <div className="App-content">
+            <Button className="App-item" name="Users" />
+            <Button className="App-item" name="Sing up" />
+          </div>
+        </header>
+      </div>
     );
   }
 }

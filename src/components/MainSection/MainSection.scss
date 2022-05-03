@@ -9,11 +9,13 @@
 .title-text {
   font-size: 40px;
   line-height: 40px;
+  text-align: center;
 }
 .main-text {
   padding-bottom: 34px;
   font-size: 16px;
   line-height: 26px;
+  text-align: center;
 }
 
 .title {
@@ -22,4 +24,32 @@
   background-position: center center;
   background-size: cover;
   color: $white;
+}
+
+@media (min-width: 320px) and (max-width: 359px) {
+  .main-section {
+    width: 300px;
+    padding-top: 40px;
+    padding-bottom: 70px;
+  }
+  .title {
+    padding: 0 16px;
+    height: 500px;
+  }
+}
+@media (min-width: 360px) and (max-width: 767px) {
+  .main-section {
+    width: 328px;
+    padding-top: 89px;
+    padding-bottom: 88px;
+  }
+  .title {
+    padding: 0 34px;
+    height: 500px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .title {
+    padding: 0 60px;
+  }
 }
