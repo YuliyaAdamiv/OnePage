@@ -1,5 +1,7 @@
-import React from 'react';
+import React, {createRef} from 'react';
 import SimpleReactValidator from 'simple-react-validator';
+// import axios from 'axios';
+// import {Button} from 'react-bootstrap';
 import Button from '../Button/Button';
 import './Form.scss';
 
@@ -13,7 +15,9 @@ class Form extends React.Component {
       isLoaded: false,
       error: null,
       token: '',
+      position_id: null,
     };
+    this.ref = createRef();
     this.validator = new SimpleReactValidator({
       validators: {
         phone: {
@@ -46,7 +50,16 @@ class Form extends React.Component {
   }
 
   componentDidMount() {
-    fetch('https://frontend-test-assignment-api.abz.agency/api/v1/token')
+    console.log(this.ref.current);
+    fetch('https://frontend-test-assignment-api.abz.agency/api/v1/token', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type':
+          'application/x-www-form-urlencoded; charset=UTF-8;application/json',
+        token: this.state.token,
+      },
+    })
       .then(function (response) {
         return response.json();
       })
@@ -56,8 +69,6 @@ class Form extends React.Component {
             isLoaded: true,
             token: result.token,
           });
-          console.log(result.token);
-          console.log(this.state);
         },
         (error) => {
           this.setState({
@@ -65,7 +76,15 @@ class Form extends React.Component {
           });
         }
       );
-    fetch('https://frontend-test-assignment-api.abz.agency/api/v1/positions')
+    fetch('https://frontend-test-assignment-api.abz.agency/api/v1/positions', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type':
+          'application/x-www-form-urlencoded; charset=UTF-8;application/json',
+        token: this.state.token,
+      },
+    })
       .then(function (response) {
         return response.json();
       })
@@ -73,42 +92,80 @@ class Form extends React.Component {
         this.setState({
           position: position,
         });
-        console.log(position);
-        console.log(this.state);
       });
   }
   handleFileUpload = (event) => {
     let photo = event.target.files[0];
     let form = new FormData();
     this.setState({
-      photo: form,
+      photo: photo,
     });
     console.log(photo);
     console.log(form);
   };
 
   handleChange = (e) => {
-    const {id, name, position_id, value} = e.target;
+    const {id} = e.target;
 
     this.setState({
-      [name]: value,
-      [position_id]: id,
+      position_id: id,
     });
-    console.log(id, value);
+    console.log(id);
   };
   changeHandler = (e) => {
     this.setState({[e.target.name]: e.target.value});
   };
   submitHandler = (e) => {
     e.preventDefault();
-    // console.log(this.state);
-    // console.log(formData);
+    const {name, email, phone, photo, position_id} = this.state;
+    let position = parseInt(position_id);
+    let formData = new FormData();
+
+    formData.append('photo', photo);
+    formData.append('email', email);
+    formData.append(
+      'phone',
+      phone
+        .replaceAll(' ', '')
+        .replaceAll('(', '')
+        .replaceAll(')', '')
+        .replaceAll('-', '')
+    );
+    formData.append('position_id', position);
+    formData.append('name', name);
+    console.log(formData);
+    console.log(this.state);
+    console.log(this.state.token);
     fetch('https://frontend-test-assignment-api.abz.agency/api/v1/users', {
       method: 'POST',
-      // body: JSON.stringify(formData),
-      headers: {Token: this.state.token},
+      mode: 'no-cors',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Access-Control-Allow-Origin': '*',
+        'Transfer-Encoding': 'chunked',
+        Connection: 'keep-alive',
+        'Content-Type':
+          'application/x-www-form-urlencoded; charset=UTF-8;application/json',
+        Token: this.state.token,
+      },
+      redirect: 'follow',
+      body: formData,
     })
+      // axios
+      //   .post('https://frontend-test-assignment-api.abz.agency/api/v1/users', {
+      //     name,
+      //     email,
+      //     phone,
+      //     photo,
+      //     position_id,
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //       Accept: 'application/json',
+      //       Authorization: `Bearer ${this.state.token}`,
+      //     },
+      //   })
       .then(function (response) {
+        console.log(response);
         return response.json();
       })
       .then(function (formData) {
@@ -125,15 +182,7 @@ class Form extends React.Component {
   };
 
   render() {
-    const {name, email, phone, error, position, photo, isLoaded} = this.state;
-    var formData = {
-      name: name,
-      email: email,
-      phone: phone,
-      position_id: position,
-      photo: photo,
-    };
-    // console.log(formData);
+    const {name, email, phone, error, isLoaded} = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -235,13 +284,14 @@ class Form extends React.Component {
             </div>
             <label>
               <input
-                ref="fileInput"
+                ref={this.ref}
                 onChange={this.handleFileUpload}
                 type="file"
                 accept="image/*"
-                style={{display: 'none'}}
+                name="photo"
+                // style={{display: 'none'}}
               />
-              <button
+              {/* <button
                 className="upload"
                 onClick={() => this.refs.fileInput.click()}
               >
@@ -251,7 +301,7 @@ class Form extends React.Component {
                 className="file"
                 placeholder="Upload your photo "
                 onBlur={() => this.validator.showMessageFor('files')}
-              />
+              /> */}
               <div className="message-error">
                 {this.validator.message(
                   'files',
@@ -261,7 +311,7 @@ class Form extends React.Component {
               </div>
             </label>
 
-            <Button onClick={this.submitHandler} type="submit" name="Sing up" />
+            <Button type="submit" name="Sing up" />
           </form>
         </div>
       );
