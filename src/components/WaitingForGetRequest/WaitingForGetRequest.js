@@ -1,6 +1,6 @@
 import React from 'react';
-// import {Button} from 'react-bootstrap';
-import Button from '../Button/Button';
+import {Button} from 'react-bootstrap';
+// import Button from '../Button/Button';
 import Card from './Card/Card';
 import './WaitingForGetRequest.scss';
 
@@ -12,45 +12,40 @@ class WaitingForGetRequest extends React.Component {
       isLoaded: false,
       items: [],
       token: '',
+      pages: null,
     };
   }
   showMore = () => {
     alert('Show More');
-    // fetch(
-    //   'https://frontend-test-assignment-api.abz.agency/api/v1/users?page=1&count=6'
-    // )
-    //   .then(function (response) {
-    //     return response.json();
-    //   })
-    //   .then(
-    //     (data) => {
-    //       this.setState({
-    //         isLoaded: true,
-    //         items: data.users,
-    //       });
-    //       console.log(data.users);
-    //       console.log(this.state);
-    //     },
-    //     (error) => {
-    //       this.setState({
-    //         isLoaded: true,
-    //         error,
-    //       });
-    //     }
-    //   );
+    fetch(
+      'https://frontend-test-assignment-api.abz.agency/api/v1/users?next_link&count=36'
+    )
+      .then(function (response) {
+        console.log(response);
+        return response.json();
+      })
+      .then(
+        (data) => {
+          this.setState({
+            isLoaded: true,
+            items: data.users,
+            pages: data.total_pages,
+          });
+          console.log(data.users);
+          console.log(data.total_pages);
+          console.log(this.state);
+        },
+        (error) => {
+          this.setState({
+            isLoaded: true,
+            error,
+          });
+        }
+      );
   };
   componentDidMount() {
     fetch(
-      'https://frontend-test-assignment-api.abz.agency/api/v1/users?page=1&count=6',
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json, text/plain, */*',
-          'Content-Type':
-            'application/x-www-form-urlencoded; charset=UTF-8;application/json',
-          token: this.state.token,
-        },
-      }
+      'https://frontend-test-assignment-api.abz.agency/api/v1/users?page=1&count=6'
     )
       .then(function (response) {
         return response.json();
@@ -72,7 +67,9 @@ class WaitingForGetRequest extends React.Component {
   }
 
   render() {
-    const {error, isLoaded, items} = this.state;
+    const {error, isLoaded, items, pages} = this.state;
+    console.log(pages);
+    console.log(this.state);
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -86,11 +83,34 @@ class WaitingForGetRequest extends React.Component {
               <Card key={item.id} item={item} />
             ))}
           </div>
-          <Button
-            variant="warning"
-            onClick={() => alert('Hello!')}
-            name="Show more"
-          />
+          {(() => {
+            if (pages === 3) {
+              return (
+                <div>
+                  <Button
+                    variant="warning"
+                    disabled={true}
+                    onClick={this.showMore}
+                    name="Show more"
+                  >
+                    Show more
+                  </Button>
+                </div>
+              );
+            } else {
+              return (
+                <div>
+                  <Button
+                    variant="warning"
+                    onClick={this.showMore}
+                    name="Show more"
+                  >
+                    Show more
+                  </Button>
+                </div>
+              );
+            }
+          })()}
         </div>
       );
     }

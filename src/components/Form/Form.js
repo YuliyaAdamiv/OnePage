@@ -15,6 +15,7 @@ class Form extends React.Component {
       error: null,
       token: '',
       position_id: null,
+      post: '',
     };
     this.ref = createRef();
     this.validator = new SimpleReactValidator({
@@ -50,15 +51,7 @@ class Form extends React.Component {
 
   componentDidMount() {
     console.log(this.ref.current);
-    fetch('https://frontend-test-assignment-api.abz.agency/api/v1/token', {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type':
-          'application/x-www-form-urlencoded; charset=UTF-8;application/json',
-        token: this.state.token,
-      },
-    })
+    fetch('https://frontend-test-assignment-api.abz.agency/api/v1/token')
       .then(function (response) {
         return response.json();
       })
@@ -75,15 +68,7 @@ class Form extends React.Component {
           });
         }
       );
-    fetch('https://frontend-test-assignment-api.abz.agency/api/v1/positions', {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type':
-          'application/x-www-form-urlencoded; charset=UTF-8;application/json',
-        token: this.state.token,
-      },
-    })
+    fetch('https://frontend-test-assignment-api.abz.agency/api/v1/positions')
       .then(function (response) {
         return response.json();
       })
@@ -146,13 +131,11 @@ class Form extends React.Component {
         console.log(response);
         return response.json();
       })
-      .then(function (formData) {
-        console.log(formData);
-        if (formData.success) {
-          console.log(formData.success);
-        } else {
-          console.log(formData.error);
-        }
+      .then((formData) => {
+        this.setState({
+          post: formData.success,
+        });
+        console.log(this.state.post);
       })
       .catch(function (error) {
         // error;
@@ -161,6 +144,7 @@ class Form extends React.Component {
 
   render() {
     const {name, email, phone, error, isLoaded} = this.state;
+    console.log(this.state);
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
