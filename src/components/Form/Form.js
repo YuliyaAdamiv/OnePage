@@ -1,6 +1,5 @@
 import React, {createRef} from 'react';
 import SimpleReactValidator from 'simple-react-validator';
-// import axios from 'axios';
 // import {Button} from 'react-bootstrap';
 import Button from '../Button/Button';
 import './Form.scss';
@@ -138,32 +137,11 @@ class Form extends React.Component {
     console.log(this.state.token);
     fetch('https://frontend-test-assignment-api.abz.agency/api/v1/users', {
       method: 'POST',
-      mode: 'no-cors',
       headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Access-Control-Allow-Origin': '*',
-        'Transfer-Encoding': 'chunked',
-        Connection: 'keep-alive',
-        'Content-Type':
-          'application/x-www-form-urlencoded; charset=UTF-8;application/json',
         Token: this.state.token,
       },
-      redirect: 'follow',
       body: formData,
     })
-      // axios
-      //   .post('https://frontend-test-assignment-api.abz.agency/api/v1/users', {
-      //     name,
-      //     email,
-      //     phone,
-      //     photo,
-      //     position_id,
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //       Accept: 'application/json',
-      //       Authorization: `Bearer ${this.state.token}`,
-      //     },
-      //   })
       .then(function (response) {
         console.log(response);
         return response.json();
