@@ -273,7 +273,13 @@ class Form extends React.Component {
               </div>
             </label>
 
-            <Button type="submit" name="Sing up" />
+            <Button
+              type="submit"
+              // onClick={() => {
+              //   addPost();
+              // }}
+              name="Sing up"
+            />
           </form>
         </div>
       );

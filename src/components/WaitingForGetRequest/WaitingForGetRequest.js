@@ -13,8 +13,10 @@ class WaitingForGetRequest extends React.Component {
       items: [],
       token: '',
       pages: null,
+      post: false,
     };
   }
+
   showMore = () => {
     alert('Show More');
     fetch(
@@ -43,6 +45,7 @@ class WaitingForGetRequest extends React.Component {
         }
       );
   };
+
   componentDidMount() {
     fetch(
       'https://frontend-test-assignment-api.abz.agency/api/v1/users?page=1&count=6'
@@ -65,11 +68,22 @@ class WaitingForGetRequest extends React.Component {
         }
       );
   }
+  componentDidUpdate(post) {
+    if (post !== this.props.post) {
+      console.log(this.props.post);
+      console.log(post.post);
+      // this.componentDidMount();
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   render() {
     const {error, isLoaded, items, pages} = this.state;
     console.log(pages);
     console.log(this.state);
+    console.log(this.props.post);
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
