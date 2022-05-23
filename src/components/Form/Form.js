@@ -136,9 +136,6 @@ class Form extends React.Component {
           post: formData.success,
         });
         console.log(this.state.post);
-      })
-      .catch(function (error) {
-        // error;
       });
   };
 
@@ -273,13 +270,7 @@ class Form extends React.Component {
               </div>
             </label>
 
-            <Button
-              type="submit"
-              // onClick={() => {
-              //   addPost();
-              // }}
-              name="Sing up"
-            />
+            <Button type="submit" name="Sing up" />
           </form>
         </div>
       );

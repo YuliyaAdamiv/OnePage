@@ -2,25 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {createStore} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
+import {composeWithDevTools} from 'redux-devtools-extension';
 import {Provider} from 'react-redux';
-// import allReducers from './components/reducers/reducer';
+import rootReducer from './components/reducers/rootReducer';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-const defaultState = {
-  post: false,
-};
-const reducer = (state = defaultState, action) => {
-  switch (action.type) {
-    case 'ADD_CARD':
-      return {...state, post: true};
-    default:
-      return state;
-  }
-};
-const store = createStore(reducer);
-// let store = createStore(allReducers);
+let store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunk))
+);
+export default store;
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>

@@ -2,133 +2,86 @@ import React from 'react';
 import {Button} from 'react-bootstrap';
 // import Button from '../Button/Button';
 import Card from './Card/Card';
+import {connect} from 'react-redux';
+import {personsFetchData} from '../action/persons';
 import './WaitingForGetRequest.scss';
 
 class WaitingForGetRequest extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: null,
-      isLoaded: false,
-      items: [],
       token: '',
       pages: null,
-      post: false,
     };
   }
 
   showMore = () => {
     alert('Show More');
-    fetch(
+    this.setState({
+      pages: this.state.pages + 3,
+    });
+    this.props.fetchData(
       'https://frontend-test-assignment-api.abz.agency/api/v1/users?next_link&count=36'
-    )
-      .then(function (response) {
-        console.log(response);
-        return response.json();
-      })
-      .then(
-        (data) => {
-          this.setState({
-            isLoaded: true,
-            items: data.users,
-            pages: data.total_pages,
-          });
-          console.log(data.users);
-          console.log(data.total_pages);
-          console.log(this.state);
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error,
-          });
-        }
-      );
+    );
   };
-
   componentDidMount() {
-    fetch(
+    this.props.fetchData(
       'https://frontend-test-assignment-api.abz.agency/api/v1/users?page=1&count=6'
-    )
-      .then(function (response) {
-        return response.json();
-      })
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            items: result.users,
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error,
-          });
-        }
-      );
-  }
-  componentDidUpdate(post) {
-    if (post !== this.props.post) {
-      console.log(this.props.post);
-      console.log(post.post);
-      // this.componentDidMount();
-      return true;
-    } else {
-      return false;
-    }
+    );
   }
 
   render() {
-    const {error, isLoaded, items, pages} = this.state;
-    console.log(pages);
-    console.log(this.state);
-    console.log(this.props.post);
-    if (error) {
-      return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
-      return <div>Loading...</div>;
-    } else {
-      return (
-        <div>
-          <h1 className="title-waiting">Working with GET request</h1>
-          <div className="waitingForGetRequest">
-            {items.map((item) => (
-              <Card key={item.id} item={item} />
-            ))}
-          </div>
-          {(() => {
-            if (pages === 3) {
-              return (
-                <div>
-                  <Button
-                    variant="warning"
-                    disabled={true}
-                    onClick={this.showMore}
-                    name="Show more"
-                  >
-                    Show more
-                  </Button>
-                </div>
-              );
-            } else {
-              return (
-                <div>
-                  <Button
-                    variant="warning"
-                    onClick={this.showMore}
-                    name="Show more"
-                  >
-                    Show more
-                  </Button>
-                </div>
-              );
-            }
-          })()}
+    const {pages} = this.state;
+    return (
+      <div>
+        <h1 className="title-waiting">Working with GET request</h1>
+        <div className="waitingForGetRequest">
+          {this.props.data.map((data) => (
+            <Card key={data.id} item={data} />
+          ))}
         </div>
-      );
-    }
+        {(() => {
+          if (pages === 3) {
+            return (
+              <div>
+                <Button
+                  variant="warning"
+                  disabled={true}
+                  onClick={this.showMore}
+                  name="Show more"
+                >
+                  Show more
+                </Button>
+              </div>
+            );
+          } else {
+            return (
+              <div>
+                <Button
+                  variant="warning"
+                  onClick={this.showMore}
+                  name="Show more"
+                >
+                  Show more
+                </Button>
+              </div>
+            );
+          }
+        })()}
+      </div>
+    );
   }
 }
 
-export default WaitingForGetRequest;
+const mapStateToProps = (state) => {
+  return {data: state.users};
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchData: (url) => dispatch(personsFetchData(url)),
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(WaitingForGetRequest);
