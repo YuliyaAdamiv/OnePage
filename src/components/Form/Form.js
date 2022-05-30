@@ -22,11 +22,13 @@ class Form extends React.Component {
       validators: {
         phone: {
           message:
-            'User phone number. Number should start with code of Ukraine +380.',
+            'User phone number. Number should start with code of Ukraine +38.',
           rule: (value, params, validator) => {
             return (
-              validator.helpers.testRegex(value, /^[\+]{0,1}380([0-9]{9})$/i) &&
-              params.indexOf(value) === -1
+              validator.helpers.testRegex(
+                value,
+                /((\+38)?\(?\d{3}\)?[\s-]?(\d{3}[\s-]\d{2}[\s-]\d{2}|\d{3}-\d{4}))/i
+              ) && params.indexOf(value) === -1
             );
           },
           messageReplace: (message, params) =>
@@ -37,7 +39,7 @@ class Form extends React.Component {
           message: 'User photo is not required.',
           rule: (value, params, validator) => {
             return (
-              validator.helpers.testRegex(value, /^[\+]{0,1}380([0-9]{9})$/i) &&
+              validator.helpers.testRegex(value, /^([0-9])$/i) &&
               params.indexOf(value) === -1
             );
           },
@@ -80,6 +82,14 @@ class Form extends React.Component {
   }
   handleFileUpload = (event) => {
     let photo = event.target.files[0];
+    if (!photo) {
+      console.log('image is required');
+      return false;
+    }
+    if (!photo.name.match(/\.(jpg|jpeg)$/)) {
+      console.log('select valid image.');
+      return false;
+    }
     let form = new FormData();
     this.setState({
       photo: photo,
@@ -152,17 +162,18 @@ class Form extends React.Component {
           <h1 className="title-waiting">Working with POST request</h1>
           <form onSubmit={this.submitHandler}>
             <input
-              className="input"
+              className="input form-control"
               placeholder="Your name"
               name="name"
+              required=""
               value={name}
               onChange={this.changeHandler}
               onBlur={() => this.validator.showMessageFor('name')}
             />
             <div className="message-error">
               {this.validator.message(
-                'name',
-                this.state.email,
+                'string',
+                this.state.string,
                 'required|min:2|max:60'
               )}
             </div>
@@ -171,6 +182,7 @@ class Form extends React.Component {
               placeholder="Email"
               name="email"
               value={email}
+              required=""
               onChange={this.changeHandler}
               onBlur={() => this.validator.showMessageFor('email')}
             />
@@ -185,6 +197,7 @@ class Form extends React.Component {
               className="input"
               placeholder="Phone"
               name="phone"
+              required=""
               value={phone}
               onChange={this.changeHandler}
               onBlur={() => this.validator.showMessageFor('phone')}
@@ -246,6 +259,7 @@ class Form extends React.Component {
                 ref={this.ref}
                 onChange={this.handleFileUpload}
                 type="file"
+                required=""
                 accept="image/*"
                 name="photo"
                 // style={{display: 'none'}}
