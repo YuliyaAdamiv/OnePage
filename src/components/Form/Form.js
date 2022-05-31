@@ -21,8 +21,7 @@ class Form extends React.Component {
     this.validator = new SimpleReactValidator({
       validators: {
         phone: {
-          message:
-            'User phone number. Number should start with code of Ukraine +38.',
+          message: ' Number should start with code of Ukraine +38.',
           rule: (value, params, validator) => {
             return (
               validator.helpers.testRegex(
@@ -35,18 +34,35 @@ class Form extends React.Component {
             message.replace(':values', this.helpers.toSentence(params)),
           required: true,
         },
-        files: {
-          message: 'User photo is not required.',
-          rule: (value, params, validator) => {
+        alpha: {
+          message: 'The :attribute may only  letters.',
+          rule: (val, params, validator) => {
             return (
-              validator.helpers.testRegex(value, /^([0-9])$/i) &&
-              params.indexOf(value) === -1
+              validator.helpers.testRegex(val, /^[a-z]*$/i) &&
+              params.indexOf(val) === -1
             );
           },
           messageReplace: (message, params) =>
             message.replace(':values', this.helpers.toSentence(params)),
           required: true,
         },
+        in: {
+          message: 'The selected :attribute must be :values.',
+          rule: function rule(val, options) {
+            return options.indexOf(val) > -1;
+          },
+          messageReplace: function messageReplace(message, options) {
+            return message.replace(':values', this.helpers.toSentence(options));
+          },
+        },
+      },
+      submitForm: function () {
+        if (this.validator.allValid()) {
+          alert('You submitted the form and stuff!');
+        } else {
+          this.validator.showMessages();
+          this.forceUpdate();
+        }
       },
     });
   }
@@ -82,6 +98,8 @@ class Form extends React.Component {
   }
   handleFileUpload = (event) => {
     let photo = event.target.files[0];
+
+    console.log(photo);
     if (!photo) {
       console.log('image is required');
       return false;
@@ -94,6 +112,11 @@ class Form extends React.Component {
     this.setState({
       photo: photo,
     });
+
+    if (!event.target.files[0].size < 5000) {
+      console.log('image not valid');
+    }
+
     console.log(photo);
     console.log(form);
   };
@@ -150,7 +173,7 @@ class Form extends React.Component {
   };
 
   render() {
-    const {name, email, phone, error, isLoaded} = this.state;
+    const {alpha, email, phone, error, isLoaded} = this.state;
     console.log(this.state);
     if (error) {
       return <div>Error: {error.message}</div>;
@@ -165,16 +188,15 @@ class Form extends React.Component {
               className="input form-control"
               placeholder="Your name"
               name="name"
-              required=""
-              value={name}
+              value={alpha}
               onChange={this.changeHandler}
-              onBlur={() => this.validator.showMessageFor('name')}
+              onBlur={() => this.validator.showMessageFor('alpha')}
             />
             <div className="message-error">
               {this.validator.message(
-                'string',
-                this.state.string,
-                'required|min:2|max:60'
+                'alpha',
+                this.state.alpha,
+                'required|alpha|min:2|max:60'
               )}
             </div>
             <input
@@ -276,15 +298,20 @@ class Form extends React.Component {
                 onBlur={() => this.validator.showMessageFor('files')}
               /> */}
               <div className="message-error">
-                {this.validator.message(
+                {/* {this.validator.message(
                   'files',
                   this.state.photo,
                   'required|files'
+                )} */}
+                {this.validator.message(
+                  'in',
+                  this.state.in,
+                  'required|in:stu,stuart,stuman'
                 )}
               </div>
             </label>
 
-            <Button type="submit" name="Sing up" />
+            <Button type="submit" name="Sing up" onClick={this.submitForm} />
           </form>
         </div>
       );
