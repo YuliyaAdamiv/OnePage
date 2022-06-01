@@ -113,10 +113,20 @@ class Form extends React.Component {
       photo: photo,
     });
 
-    if (!event.target.files[0].size < 5000) {
+    if (event.target.files[0].size < 5000) {
       console.log('image not valid');
     }
 
+    let img = new Image();
+    img.src = window.URL.createObjectURL(event.target.files[0]);
+    img.onload = () => {
+      if (img.width === 70 && img.height === 70) {
+        console.log(`Nice, image is the right size. It can be uploaded`);
+      } else {
+        console.log(`Sorry, this image doesn't look like the size we wanted. It's 
+   ${img.width} x ${img.height} but we require 100 x 100 size image.`);
+      }
+    };
     console.log(photo);
     console.log(form);
   };
@@ -284,6 +294,7 @@ class Form extends React.Component {
                 required=""
                 accept="image/*"
                 name="photo"
+                id="photoInput"
                 // style={{display: 'none'}}
               />
               {/* <button
