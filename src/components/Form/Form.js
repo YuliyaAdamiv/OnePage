@@ -14,7 +14,7 @@ class Form extends React.Component {
       isLoaded: false,
       error: null,
       token: '',
-      position_id: null,
+      position_id: 1,
       post: '',
     };
     this.ref = createRef();
